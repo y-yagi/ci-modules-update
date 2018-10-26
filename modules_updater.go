@@ -202,8 +202,8 @@ func (updater *ModulesUpdater) generateDiffLink(before *Require, after *Require)
 	golangOrg := "golang.org/x/"
 	golangOrgLen := len(golangOrg)
 
-	prev := before.Version
-	cur := after.Version
+	prev := updater.generateTagFromVersion(before.Version)
+	cur := updater.generateTagFromVersion(after.Version)
 
 	if strings.Contains(name, "github.com") {
 		compareLink = fmt.Sprintf("[%s...%s](https://%s/compare/%s...%s)", prev, cur, name, prev, cur)
@@ -214,4 +214,13 @@ func (updater *ModulesUpdater) generateDiffLink(before *Require, after *Require)
 		return fmt.Sprintf("* [%s](%s) [%s...%s](%s/compare/%s...%s)\n", name, url, prev, cur, url, prev, cur)
 	}
 	return fmt.Sprintf("* [%s](https://%s) %s...%s\n", name, name, prev, cur)
+}
+
+func (updater *ModulesUpdater) generateTagFromVersion(v string) string {
+	v = strings.TrimSuffix(v, "+incompatible")
+	if strings.HasPrefix(v, "v0.0.0-") {
+		// NOTE: "pseudo-version" is `v0.0.0-yyyymmddhhmmss-abcdefabcdef` format
+		v = strings.Split(v, "-")[2]
+	}
+	return v
 }
