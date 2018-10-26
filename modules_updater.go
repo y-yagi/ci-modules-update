@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -98,7 +99,8 @@ func (updater *ModulesUpdater) Run() error {
 }
 
 func (updater *ModulesUpdater) readModules(dir string) (*GoMod, error) {
-	cmd := exec.Command("go", "mod", "edit", "-json")
+	file := filepath.Join(dir, "go.mod")
+	cmd := exec.Command("go", "mod", "edit", "-json", file)
 	cmd.Env = append(os.Environ(), "GO111MODULE=on")
 	stdoutStederr, err := cmd.CombinedOutput()
 	if err != nil {
