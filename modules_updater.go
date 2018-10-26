@@ -46,7 +46,7 @@ type Replace struct {
 
 // NewModulesUpdater creates a new updater.
 func NewModulesUpdater(cli *cli.Context) *ModulesUpdater {
-	updater := &ModulesUpdater{cli: cli, dryRun: cli.Bool("dry-run")}
+	updater := &ModulesUpdater{cli: cli}
 
 	return updater
 }
@@ -54,6 +54,8 @@ func NewModulesUpdater(cli *cli.Context) *ModulesUpdater {
 // Run update.
 func (updater *ModulesUpdater) Run() error {
 	var result bool
+
+	updater.dryRun = updater.cli.Bool("dry-run")
 
 	beforeMod, err := updater.readModules(".")
 	if err != nil {
