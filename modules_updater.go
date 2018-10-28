@@ -76,6 +76,7 @@ func (updater *ModulesUpdater) Run() error {
 	}
 
 	if !result {
+		fmt.Print("all modules are already up to date.\n")
 		return nil
 	}
 
