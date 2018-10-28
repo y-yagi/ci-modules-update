@@ -23,6 +23,7 @@ require (
 	golang.org/x/crypto v0.0.0-20181025213731-e84da0312774 // indirect
 	golang.org/x/net v0.0.0-20181023162649-9b4f9f5ad519 // indirect
 	golang.org/x/sys v0.0.0-20181025063200-d989b31c8746 // indirect
+	google.golang.org/api v0.0.0-20180921000521-511bab8e55de
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	mellium.im/sasl v0.2.1 // indirect
 )
