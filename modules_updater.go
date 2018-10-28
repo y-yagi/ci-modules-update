@@ -201,6 +201,8 @@ func (updater *ModulesUpdater) generateDiffLink(before *Require, after *Require)
 	name := after.Path
 	golangOrg := "golang.org/x/"
 	golangOrgLen := len(golangOrg)
+	cloudGoogleCom := "cloud.google.com/go"
+	cloudGoogleComLen := len(cloudGoogleCom)
 
 	prev := updater.generateTagFromVersion(before.Version)
 	cur := updater.generateTagFromVersion(after.Version)
@@ -211,6 +213,9 @@ func (updater *ModulesUpdater) generateDiffLink(before *Require, after *Require)
 	} else if name[:golangOrgLen] == golangOrg {
 		pkg = name[golangOrgLen:]
 		url = "https://github.com/golang/" + pkg
+		return fmt.Sprintf("* [%s](%s) [%s...%s](%s/compare/%s...%s)\n", name, url, prev, cur, url, prev, cur)
+	} else if name[:cloudGoogleComLen] == cloudGoogleCom {
+		url = "https://github.com/GoogleCloudPlatform/google-cloud-go"
 		return fmt.Sprintf("* [%s](%s) [%s...%s](%s/compare/%s...%s)\n", name, url, prev, cur, url, prev, cur)
 	}
 	return fmt.Sprintf("* [%s](https://%s) %s...%s\n", name, name, prev, cur)
