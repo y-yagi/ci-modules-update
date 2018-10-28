@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.11
+        environment:
+          GO111MODULE: "on"
+    working_directory: /go/src/github.com/y-yagi/ci-modules-update
+    steps:
+      - checkout
+
+      - run:
+          name: Run lint
+          command: |
+            go get -u github.com/golang/lint/golint
+            golint -set_exit_status ./...
+      - Run:
+          name: Run go mod
+          command: |
+            go mod download
+            go mod vendor
+
+      - run:
+          name: Run megacheck
+          command: |
+            go get -u honnef.co/go/tools/cmd/megacheck
+            GO111MODULE=off megacheck ./...

@@ -22,6 +22,7 @@ type ModulesUpdater struct {
 	dryRun bool
 }
 
+// GoMod is a struct fo go.mod.
 type GoMod struct {
 	Module  Module
 	Require []Require
@@ -29,17 +30,20 @@ type GoMod struct {
 	Replace []Replace
 }
 
+// Module is a struct fo package.
 type Module struct {
 	Path    string
 	Version string
 }
 
+// Require is a struct fo require package.
 type Require struct {
 	Path     string
 	Version  string
 	Indirect bool
 }
 
+// Replace is a struct fo replace package.
 type Replace struct {
 	Old Module
 	New Module
@@ -170,10 +174,10 @@ func (updater *ModulesUpdater) createPullRequest(ctx *context.Context, client *g
 	if updater.dryRun {
 		fmt.Printf("\n%v\n", *body)
 		return nil
-	} else {
-		_, _, err := client.PullRequests.Create(*ctx, ownerAndRepo[0], ownerAndRepo[1], pr)
-		return err
 	}
+
+	_, _, err := client.PullRequests.Create(*ctx, ownerAndRepo[0], ownerAndRepo[1], pr)
+	return err
 }
 
 func (updater *ModulesUpdater) generatePullRequestBody(beforeMod *GoMod, afterMod *GoMod) string {
