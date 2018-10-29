@@ -4,6 +4,7 @@ module github.com/y-yagi/okiniarts/server
 
 require (
 	cloud.google.com/go v0.31.0 // indirect
+	github.com/y-yagi/ci-modules-update v0.0.0-20181028233520-12c5ff425996 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-pg/pg v6.15.1+incompatible
