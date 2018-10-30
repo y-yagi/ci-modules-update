@@ -182,28 +182,54 @@ func (updater *ModulesUpdater) createPullRequest(ctx *context.Context, client *g
 }
 
 func (updater *ModulesUpdater) generatePullRequestBody(beforeMod *GoMod, afterMod *GoMod) string {
-	result := "**Changed:**\n\n"
+	changedLabel := "**Changed:**\n\n"
+	addedLabel := "**Added:**\n\n"
+	changed := changedLabel
+	added := addedLabel
+
+	var result string
+	var existInBefore bool
 
 	for _, afterRequire := range afterMod.Require {
 		for _, beforeRequire := range beforeMod.Require {
 			if beforeRequire.Path == afterRequire.Path {
 				if beforeRequire.Version != afterRequire.Version {
-					result += updater.generateDiffLink(&beforeRequire, &afterRequire)
+					changed += updater.generateDiffLink(&beforeRequire, &afterRequire)
 				}
+				existInBefore = true
 				break
 			}
 		}
+		if !existInBefore {
+			added += fmt.Sprintf("* [%s](%s)\n", afterRequire.Path, updater.generateRepoURL(&afterRequire))
+		}
+		existInBefore = false
 	}
 
+	if added != addedLabel {
+		result += added + "\n\n"
+	}
+	if changed != changedLabel {
+		result += changed
+	}
 	return result
 }
 
 func (updater *ModulesUpdater) generateDiffLink(before *Require, after *Require) string {
-	var compareLink string
-	var pkg string
-	var url string
+	path := after.Path
+	prev := updater.generateTagFromVersion(before.Version)
+	cur := updater.generateTagFromVersion(after.Version)
+	url := updater.generateRepoURL(after)
 
-	name := after.Path
+	if strings.Contains(url, "github.com") {
+		return fmt.Sprintf("* [%s](%s) [%s...%s](%s/compare/%s...%s)\n", path, url, prev, cur, url, prev, cur)
+	}
+	return fmt.Sprintf("* [%s](%s) %s...%s\n", path, path, prev, cur)
+}
+
+func (updater *ModulesUpdater) generateRepoURL(require *Require) string {
+	path := require.Path
+
 	golangOrg := "golang.org/x/"
 	golangOrgLen := len(golangOrg)
 	cloudGoogleCom := "cloud.google.com/go"
@@ -211,24 +237,15 @@ func (updater *ModulesUpdater) generateDiffLink(before *Require, after *Require)
 	googleGolangOrg := "google.golang.org/api"
 	googleGolangOrgLen := len(googleGolangOrg)
 
-	prev := updater.generateTagFromVersion(before.Version)
-	cur := updater.generateTagFromVersion(after.Version)
-
-	if strings.Contains(name, "github.com") {
-		compareLink = fmt.Sprintf("[%s...%s](https://%s/compare/%s...%s)", prev, cur, name, prev, cur)
-		return fmt.Sprintf("* [%s](https://%s) %s\n", name, name, compareLink)
-	} else if name[:golangOrgLen] == golangOrg {
-		pkg = name[golangOrgLen:]
-		url = "https://github.com/golang/" + pkg
-		return fmt.Sprintf("* [%s](%s) [%s...%s](%s/compare/%s...%s)\n", name, url, prev, cur, url, prev, cur)
-	} else if name[:cloudGoogleComLen] == cloudGoogleCom {
-		url = "https://github.com/GoogleCloudPlatform/google-cloud-go"
-		return fmt.Sprintf("* [%s](%s) [%s...%s](%s/compare/%s...%s)\n", name, url, prev, cur, url, prev, cur)
-	} else if name[:googleGolangOrgLen] == googleGolangOrg {
-		url = "https://github.com/googleapis/google-api-go-client"
-		return fmt.Sprintf("* [%s](%s) [%s...%s](%s/compare/%s...%s)\n", name, url, prev, cur, url, prev, cur)
+	if path[:golangOrgLen] == golangOrg {
+		return "https://github.com/golang/" + path[golangOrgLen:]
+	} else if (len(path) >= cloudGoogleComLen) && (path[:cloudGoogleComLen] == cloudGoogleCom) {
+		return "https://github.com/GoogleCloudPlatform/google-cloud-go"
+	} else if (len(path) >= googleGolangOrgLen) && (path[:googleGolangOrgLen] == googleGolangOrg) {
+		return "https://github.com/googleapis/google-api-go-client"
 	}
-	return fmt.Sprintf("* [%s](https://%s) %s...%s\n", name, name, prev, cur)
+
+	return "https://" + path
 }
 
 func (updater *ModulesUpdater) generateTagFromVersion(v string) string {

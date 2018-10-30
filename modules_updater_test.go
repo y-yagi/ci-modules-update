@@ -24,7 +24,12 @@ func TestGeneratePullRequestBody(t *testing.T) {
 	}
 
 	got := updater.generatePullRequestBody(before, after)
-	want := `**Changed:**
+	want := `**Added:**
+
+* [github.com/y-yagi/ci-modules-update](https://github.com/y-yagi/ci-modules-update)
+
+
+**Changed:**
 
 * [cloud.google.com/go](https://github.com/GoogleCloudPlatform/google-cloud-go) [v0.28.0...v0.31.0](https://github.com/GoogleCloudPlatform/google-cloud-go/compare/v0.28.0...v0.31.0)
 * [github.com/go-pg/pg](https://github.com/go-pg/pg) [v6.14.0...v6.15.1](https://github.com/go-pg/pg/compare/v6.14.0...v6.15.1)
