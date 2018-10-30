@@ -1,0 +1,8 @@
+builds:
+  - binary: ci-modules-update
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
