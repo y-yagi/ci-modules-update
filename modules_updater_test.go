@@ -36,6 +36,7 @@ func TestGeneratePullRequestBody(t *testing.T) {
 * [golang.org/x/crypto](https://github.com/golang/crypto) [74cb1d3d52f4...e84da0312774](https://github.com/golang/crypto/compare/74cb1d3d52f4...e84da0312774)
 * [golang.org/x/sys](https://github.com/golang/sys) [5cd93ef61a7c...d989b31c8746](https://github.com/golang/sys/compare/5cd93ef61a7c...d989b31c8746)
 * [google.golang.org/api](https://github.com/googleapis/google-api-go-client) [920bb1beccf7...511bab8e55de](https://github.com/googleapis/google-api-go-client/compare/920bb1beccf7...511bab8e55de)
+* [google.golang.org/appengine](https://github.com/golang/appengine) [v1.2.0...v1.3.0](https://github.com/golang/appengine/compare/v1.2.0...v1.3.0)
 `
 
 	if got != want {

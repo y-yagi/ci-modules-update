@@ -236,6 +236,8 @@ func (updater *ModulesUpdater) generateRepoURL(require *Require) string {
 	cloudGoogleComLen := len(cloudGoogleCom)
 	googleGolangOrg := "google.golang.org/api"
 	googleGolangOrgLen := len(googleGolangOrg)
+	googleGolangAppEngineOrg := "google.golang.org/appengine"
+	googleGolangAppEngineOrgLen := len(googleGolangAppEngineOrg)
 
 	if path[:golangOrgLen] == golangOrg {
 		return "https://github.com/golang/" + path[golangOrgLen:]
@@ -243,6 +245,8 @@ func (updater *ModulesUpdater) generateRepoURL(require *Require) string {
 		return "https://github.com/GoogleCloudPlatform/google-cloud-go"
 	} else if (len(path) >= googleGolangOrgLen) && (path[:googleGolangOrgLen] == googleGolangOrg) {
 		return "https://github.com/googleapis/google-api-go-client"
+	} else if (len(path) >= googleGolangAppEngineOrgLen) && (path[:googleGolangAppEngineOrgLen] == googleGolangAppEngineOrg) {
+		return "https://github.com/golang/appengine"
 	}
 
 	return "https://" + path
