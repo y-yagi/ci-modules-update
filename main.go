@@ -75,7 +75,7 @@ func commandFlags() []cli.Flag {
 		},
 		cli.BoolFlag{
 			Name:  "dry-run",
-			Usage: "dry run",
+			Usage: "only show diff",
 		},
 	}
 }
