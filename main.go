@@ -81,6 +81,10 @@ func commandFlags() []cli.Flag {
 }
 
 func checkRequiredArguments(c *cli.Context) error {
+	if c.Bool("dry-run") {
+		return nil
+	}
+
 	if c.String("user") == "" {
 		return errors.New("please set Git user name")
 	}
