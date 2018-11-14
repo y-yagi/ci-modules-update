@@ -217,8 +217,8 @@ func (updater *ModulesUpdater) generatePullRequestBody(beforeMod *GoMod, afterMo
 
 func (updater *ModulesUpdater) generateDiffLink(before *Require, after *Require) string {
 	path := after.Path
-	prev := updater.generateTagFromVersion(before.Version)
-	cur := updater.generateTagFromVersion(after.Version)
+	prev := updater.cutTagFromVersion(before.Version)
+	cur := updater.cutTagFromVersion(after.Version)
 	url := updater.generateRepoURL(after)
 
 	if strings.Contains(url, "github.com") {
@@ -252,7 +252,7 @@ func (updater *ModulesUpdater) generateRepoURL(require *Require) string {
 	return "https://" + path
 }
 
-func (updater *ModulesUpdater) generateTagFromVersion(v string) string {
+func (updater *ModulesUpdater) cutTagFromVersion(v string) string {
 	v = strings.TrimSuffix(v, "+incompatible")
 	if strings.HasPrefix(v, "v0.0.0-") {
 		// NOTE: "pseudo-version" is `v0.0.0-yyyymmddhhmmss-abcdefabcdef` format
