@@ -240,7 +240,7 @@ func (updater *ModulesUpdater) generateRepoURL(require *Require) string {
 		pattenLen := len(pattern)
 		if (len(path) >= pattenLen) && (path[:pattenLen] == pattern) {
 			if pattern == "golang.org/x/" {
-				return repo + path[golangOrgLen:]
+				return repo + path[pattenLen:]
 			}
 			return repo
 		}
