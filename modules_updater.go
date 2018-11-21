@@ -229,24 +229,21 @@ func (updater *ModulesUpdater) generateDiffLink(before *Require, after *Require)
 
 func (updater *ModulesUpdater) generateRepoURL(require *Require) string {
 	path := require.Path
+	repos := map[string]string{
+		"golang.org/x/":               "https://github.com/golang/",
+		"cloud.google.com/go":         "https://github.com/GoogleCloudPlatform/google-cloud-go",
+		"google.golang.org/api":       "https://github.com/googleapis/google-api-go-client",
+		"google.golang.org/appengine": "https://github.com/golang/appengine",
+	}
 
-	golangOrg := "golang.org/x/"
-	golangOrgLen := len(golangOrg)
-	cloudGoogleCom := "cloud.google.com/go"
-	cloudGoogleComLen := len(cloudGoogleCom)
-	googleGolangOrg := "google.golang.org/api"
-	googleGolangOrgLen := len(googleGolangOrg)
-	googleGolangAppEngineOrg := "google.golang.org/appengine"
-	googleGolangAppEngineOrgLen := len(googleGolangAppEngineOrg)
-
-	if path[:golangOrgLen] == golangOrg {
-		return "https://github.com/golang/" + path[golangOrgLen:]
-	} else if (len(path) >= cloudGoogleComLen) && (path[:cloudGoogleComLen] == cloudGoogleCom) {
-		return "https://github.com/GoogleCloudPlatform/google-cloud-go"
-	} else if (len(path) >= googleGolangOrgLen) && (path[:googleGolangOrgLen] == googleGolangOrg) {
-		return "https://github.com/googleapis/google-api-go-client"
-	} else if (len(path) >= googleGolangAppEngineOrgLen) && (path[:googleGolangAppEngineOrgLen] == googleGolangAppEngineOrg) {
-		return "https://github.com/golang/appengine"
+	for pattern, repo := range repos {
+		pattenLen := len(pattern)
+		if (len(path) >= pattenLen) && (path[:pattenLen] == pattern) {
+			if pattern == "golang.org/x/" {
+				return repo + path[golangOrgLen:]
+			}
+			return repo
+		}
 	}
 
 	return "https://" + path
