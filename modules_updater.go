@@ -127,6 +127,13 @@ func (updater *ModulesUpdater) runModuleUpdate() error {
 	if stdoutStederr, err := cmd.CombinedOutput(); err != nil {
 		return errors.New("run `go get -u` failed. cause: " + string(stdoutStederr))
 	}
+
+	cmd = exec.Command("go", "mod", "tidy")
+	cmd.Env = append(os.Environ(), "GO111MODULE=on")
+
+	if stdoutStederr, err := cmd.CombinedOutput(); err != nil {
+		return errors.New("run `go mod tidy` failed. cause: " + string(stdoutStederr))
+	}
 	return nil
 }
 
