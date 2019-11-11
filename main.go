@@ -25,7 +25,7 @@ func run(args []string, outStream, errStream io.Writer) int {
 	app := cli.NewApp()
 	app.Name = "ci-modules-update"
 	app.Usage = "create a modules update PR"
-	app.Version = "0.1.2"
+	app.Version = "0.1.3"
 	app.Flags = commandFlags()
 	app.Action = appRun
 
